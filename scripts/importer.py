@@ -51,16 +51,16 @@ def main() -> None:
     stations_valides_ids = set()
 
     for idx, ligne in enumerate(stations_lignes): #Enumerate(affiche les éléments d'une liste en leur attribuant un index)
-        id_station = str(ligne["station_id"]).strip() if pd.notna(ligne["station_id"]) else f"ligne_{idx}"
+        station_id = str(ligne["station_id"]).strip() if pd.notna(ligne["station_id"]) else f"ligne_{idx}"
 
         try:
             valider_station(ligne)
             stations_valides.append(ligne)
-            stations_valides_ids.add(id_station)
+            stations_valides_ids.add(station_id)
         except ValueError as e:
             logs_rejets.append({
                 "fichier_source": "stations.csv",
-                "id_entite": id_station,
+                "id_entite": station_id,
                 "code_regle": "RG1",
                 "motif": str(e),
                 "decision": "REJET"

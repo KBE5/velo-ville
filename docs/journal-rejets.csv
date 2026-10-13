@@ -1,0 +1,21 @@
+fichier_source,id_entite,code_regle,motif,decision
+trajets.csv,ligne_29,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,ligne_33,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,ligne_153,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,ligne_236,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,ligne_599,RG2/RG4,Durée invalide ou non numérique: -120,REJET
+trajets.csv,ligne_600,RG2/RG4,Durée invalide ou non numérique: -120,REJET
+trajets.csv,ligne_716,RG2/RG4,Durée invalide ou non numérique: -45,REJET
+trajets.csv,ligne_863,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,ligne_904,RG2/RG4,Durée invalide ou non numérique: -45,REJET
+trajets.csv,ligne_929,RG2/RG4,Durée invalide ou non numérique: -120,REJET
+trajets.csv,ligne_1073,RG2/RG4,Durée invalide ou non numérique: 0,REJET
+trajets.csv,ligne_1080,RG2/RG4,Durée invalide ou non numérique: 0,REJET
+trajets.csv,ligne_1280,RG2/RG4,Durée invalide ou non numérique: 0,REJET
+trajets.csv,ligne_1470,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,ligne_1696,RG2/RG4,Durée invalide ou non numérique: -120,REJET
+trajets.csv,ligne_1725,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,ligne_1856,RG2/RG4,Durée invalide ou non numérique: -45,REJET
+incidents.csv,ligne_27,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
+incidents.csv,ligne_123,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
+incidents.csv,ligne_177,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
