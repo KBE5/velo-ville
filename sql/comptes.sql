@@ -19,3 +19,5 @@ INSERT INTO utilisateur (username, mot_de_passe_hash, role) VALUES
 ON CONFLICT (username) DO UPDATE
   SET mot_de_passe_hash = EXCLUDED.mot_de_passe_hash,
       role = EXCLUDED.role;
+
+
