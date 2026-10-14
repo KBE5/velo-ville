@@ -11,8 +11,9 @@ from sqlalchemy.orm import Session
 from api.database import get_db
 from api.models import Station
 from api.schemas import StationResponse, StationPageResponse
+from api.dependencies import get_current_user
 
-router = APIRouter(prefix="/stations", tags=["Stations"])
+router = APIRouter(prefix="/stations", tags=["Stations"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=StationPageResponse)

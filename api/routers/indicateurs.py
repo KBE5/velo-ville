@@ -10,8 +10,9 @@ from sqlalchemy.orm import Session
 
 from api.database import get_db
 from api.services.indicateurs import (activite_par_jour, stations_actives, incidents_par_statut,)
+from api.dependencies import get_current_user
 
-router = APIRouter(prefix="/indicateurs", tags=["Indicateurs"])
+router = APIRouter(prefix="/indicateurs", tags=["Indicateurs"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/activite-par-jour")

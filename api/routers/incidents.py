@@ -13,10 +13,10 @@ from sqlalchemy.orm import Session
 from api.database import get_db
 from api.models import Incident
 from api.schemas import IncidentResponse, IncidentPageResponse, IncidentUpdateStatut
-# Rajouter une dépendance pour récupérer l'utilisateur courant et vérifier son rôle :
-# from api.auth import get_current_exploitant 
+from api.dependencies import get_current_user, require_roles
 
-router = APIRouter(prefix="/incidents", tags=["Incidents"])
+
+router = APIRouter(prefix="/incidents", tags=["Incidents"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=IncidentPageResponse)
@@ -65,7 +65,7 @@ def modifier_statut_incident(
     incident_id: str,
     body: IncidentUpdateStatut,
     db: Session = Depends(get_db),
-    # current_user = Depends(get_current_exploitant)  # Décommenter dq la sécurité est active
+    _= Depends(require_roles("exploitant"))  
 ):
     """Modifie le statut d'un incident (réservé au rôle exploitant)."""
     stmt = select(Incident).where(Incident.incident_id == incident_id)

@@ -12,8 +12,9 @@ from sqlalchemy.orm import Session
 from api.database import get_db
 from api.models import Trajet
 from api.schemas import TrajetResponse, TrajetPageResponse
+from api.dependencies import get_current_user
 
-router = APIRouter(prefix="/trajets", tags=["Trajets"])
+router = APIRouter(prefix="/trajets", tags=["Trajets"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=TrajetPageResponse)
