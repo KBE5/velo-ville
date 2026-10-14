@@ -9,16 +9,11 @@ base dans le même état.
 Usage prévu : python scripts/importer.py [--dossier data]
 """
 
-
+from api.database import engine
 from pathlib import Path
 import pandas as pd
 
-# Importation des fonctions pures de fiabilisation
-from api.services.fiabilisation import (
-    valider_station,
-    valider_trajet,
-    valider_incident,
-)
+from api.services.fiabilisation import (valider_station, valider_trajet, valider_incident)
 
 FICHIER_STATIONS = "data/stations.csv"
 FICHIER_TRAJETS = "data/trajets.csv"
@@ -40,7 +35,7 @@ def main() -> None:
     logs_avertissements = []
 
     # Charger des fichier bruts 
-    #"records" transforme le tableau en une liste de dictionnaires
+    #option "records" transforme le tableau en une liste de dictionnaires
     stations_lignes = pd.read_csv(FICHIER_STATIONS).to_dict(orient="records")
     trajets_lignes = pd.read_csv(FICHIER_TRAJETS).to_dict(orient="records")
     incidents_lignes = pd.read_csv(FICHIER_INCIDENTS).to_dict(orient="records")
@@ -68,18 +63,20 @@ def main() -> None:
 
     # ======Traiter les trajets=======
     trajets_valides = []
+    trajets_vus = set()#mémoriser ID 
 
     for idx, ligne in enumerate(trajets_lignes):
-        id_trajet = ligne["id_trajet"] if "id_trajet" in ligne and pd.notna(ligne["id_trajet"]) else f"ligne_{idx}"
+        id_trajet = str(ligne["trajet_id"]).strip() if "trajet_id" in ligne and pd.notna(ligne["trajet_id"]) else f"ligne_{idx}"
 
         try:
-            valider_trajet(ligne, stations_valides=stations_valides_ids)
+            # transmettre l'ensemble des trajets 
+            valider_trajet(ligne, stations_valides=stations_valides_ids, trajets_deja_vus=trajets_vus)
             trajets_valides.append(ligne)
         except ValueError as e:
             logs_rejets.append({
                 "fichier_source": "trajets.csv",
                 "id_entite": id_trajet,
-                "code_regle": "RG2/RG4",
+                "code_regle": "RG2/RG4/DOUBLON",
                 "motif": str(e),
                 "decision": "REJET"
             })
@@ -89,7 +86,7 @@ def main() -> None:
     incidents_valides = []
 
     for idx, ligne in enumerate(incidents_lignes):
-        id_incident = ligne["id_incident"] if "id_incident" in ligne and pd.notna(ligne["id_incident"]) else f"ligne_{idx}"
+        id_incident = str(ligne["incident_id"]).strip() if "incident_id" in ligne and pd.notna(ligne["incident_id"]) else f"ligne_{idx}"
         statut_brut = str(ligne["statut"]) if pd.notna(ligne["statut"]) else ""
 
         try:
@@ -119,6 +116,24 @@ def main() -> None:
                 "decision": "REJET"
             })
 
+    # ====== Préparer les DF propres et conversion des types ======
+    
+    df_stations = pd.DataFrame(stations_valides)
+    if "date_mise_en_service" in df_stations.columns:
+        df_stations["date_mise_en_service"] = pd.to_datetime(
+            df_stations["date_mise_en_service"], errors="coerce").dt.date
+
+    df_trajets = pd.DataFrame(trajets_valides)
+    if "depart_horodatage" in df_trajets.columns:
+        df_trajets["depart_horodatage"] = pd.to_datetime(
+            df_trajets["depart_horodatage"], errors="coerce")
+
+    df_incidents = pd.DataFrame(incidents_valides)
+    for col_date in ["date_signalement", "date_resolution"]:
+        if col_date in df_incidents.columns:
+            df_incidents[col_date] = pd.to_datetime(
+                df_incidents[col_date], errors="coerce")
+
     # ======Export des fichiers propre dans data/ et des journaux dans docs/=======
 
     Path("data").mkdir(parents=True, exist_ok=True)
@@ -131,7 +146,50 @@ def main() -> None:
     pd.DataFrame(logs_rejets).to_csv(SORTIE_REJETS, index=False, encoding="utf-8")
     pd.DataFrame(logs_avertissements).to_csv(SORTIE_AVERTISSEMENTS, index=False, encoding="utf-8")
 
-    print("\n=== Bilan d'importation et de fiabilisation ===")
+    # ======Export des fichiers propre dans data/ et des journaux dans docs/=======
+    Path("data").mkdir(parents=True, exist_ok=True)
+    Path("docs").mkdir(parents=True, exist_ok=True)
+
+    pd.DataFrame(stations_valides).to_csv(SORTIE_STATIONS, index=False, encoding="utf-8")
+    pd.DataFrame(trajets_valides).to_csv(SORTIE_TRAJETS, index=False, encoding="utf-8")
+    pd.DataFrame(incidents_valides).to_csv(SORTIE_INCIDENTS, index=False, encoding="utf-8")
+
+    pd.DataFrame(logs_rejets).to_csv(SORTIE_REJETS, index=False, encoding="utf-8")
+    pd.DataFrame(logs_avertissements).to_csv(SORTIE_AVERTISSEMENTS, index=False, encoding="utf-8")
+
+    # ====== Charger dans la BDD "veloville" ======
+    
+    with engine.begin() as connection:
+        # Nettoyer >> idempotence (ordre inverse des clés étrangères)
+        connection.exec_driver_sql("TRUNCATE TABLE incident, trajet, station CASCADE;")
+
+    # Corriger la date pour les stations
+    df_stations = pd.DataFrame(stations_valides)
+    if "date_mise_en_service" in df_stations.columns:
+        df_stations["date_mise_en_service"] = pd.to_datetime(
+            df_stations["date_mise_en_service"], errors="coerce").dt.date
+
+    df_stations.to_sql("station", con=engine, if_exists="append", index=False)
+
+    # Corriger le timestamp pour les trajets
+    df_trajets = pd.DataFrame(trajets_valides)
+    if "depart_horodatage" in df_trajets.columns:
+        df_trajets["depart_horodatage"] = pd.to_datetime(
+            df_trajets["depart_horodatage"], errors="coerce")
+
+    df_trajets.to_sql("trajet", con=engine, if_exists="append", index=False)
+
+    # 3. Incidents
+    df_incidents = pd.DataFrame(incidents_valides)
+    for col_date in ["date_signalement", "date_resolution"]:
+        if col_date in df_incidents.columns:
+            df_incidents[col_date] = pd.to_datetime(
+                df_incidents[col_date], errors="coerce")
+                
+    df_incidents.to_sql("incident", con=engine, if_exists="append", index=False)
+
+
+    print("\n=== Bilan final  ===")
     print(f"Stations   : {len(stations_lignes)} -> {len(stations_valides)} conservées")
     print(f"Trajets    : {len(trajets_lignes)} -> {len(trajets_valides)} conservés")
     print(f"Incidents  : {len(incidents_lignes)} -> {len(incidents_valides)} conservés")
