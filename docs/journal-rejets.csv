@@ -1,21 +1,36 @@
 fichier_source,id_entite,code_regle,motif,decision
-trajets.csv,ligne_29,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
-trajets.csv,ligne_33,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
-trajets.csv,ligne_153,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
-trajets.csv,ligne_236,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
-trajets.csv,ligne_599,RG2/RG4,Durée invalide ou non numérique: -120,REJET
-trajets.csv,ligne_600,RG2/RG4,Durée invalide ou non numérique: -120,REJET
-trajets.csv,ligne_716,RG2/RG4,Durée invalide ou non numérique: -45,REJET
-trajets.csv,ligne_863,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
-trajets.csv,ligne_904,RG2/RG4,Durée invalide ou non numérique: -45,REJET
-trajets.csv,ligne_929,RG2/RG4,Durée invalide ou non numérique: -120,REJET
-trajets.csv,ligne_1073,RG2/RG4,Durée invalide ou non numérique: 0,REJET
-trajets.csv,ligne_1080,RG2/RG4,Durée invalide ou non numérique: 0,REJET
-trajets.csv,ligne_1280,RG2/RG4,Durée invalide ou non numérique: 0,REJET
-trajets.csv,ligne_1470,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
-trajets.csv,ligne_1696,RG2/RG4,Durée invalide ou non numérique: -120,REJET
-trajets.csv,ligne_1725,RG2/RG4,Station d'arrivée inexistante dans le référentiel: S999,REJET
-trajets.csv,ligne_1856,RG2/RG4,Durée invalide ou non numérique: -45,REJET
-incidents.csv,ligne_27,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
-incidents.csv,ligne_123,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
-incidents.csv,ligne_177,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
+trajets.csv,T480030,RG2/RG4/DOUBLON,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,T480034,RG2/RG4/DOUBLON,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,T480073,RG2/RG4/DOUBLON,Trajet dupliqué : T480073,REJET
+trajets.csv,T480078,RG2/RG4/DOUBLON,Trajet dupliqué : T480078,REJET
+trajets.csv,T480152,RG2/RG4/DOUBLON,Horodatage de départ invalide ou absent: Format d'horodatage invalide: 24/08/2026 11:01,REJET
+trajets.csv,T480235,RG2/RG4/DOUBLON,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,T480288,RG2/RG4/DOUBLON,Trajet dupliqué : T480288,REJET
+trajets.csv,T480293,RG2/RG4/DOUBLON,Trajet dupliqué : T480293,REJET
+trajets.csv,T480379,RG2/RG4/DOUBLON,Horodatage de départ invalide ou absent: Format d'horodatage invalide: 25/08/2026 17:08,REJET
+trajets.csv,T480596,RG2/RG4/DOUBLON,Durée invalide ou non numérique: -120,REJET
+trajets.csv,T480596,RG2/RG4/DOUBLON,Trajet dupliqué : T480596,REJET
+trajets.csv,T480712,RG2/RG4/DOUBLON,Durée invalide ou non numérique: -45,REJET
+trajets.csv,T480847,RG2/RG4/DOUBLON,Trajet dupliqué : T480847,REJET
+trajets.csv,T480858,RG2/RG4/DOUBLON,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,T480899,RG2/RG4/DOUBLON,Durée invalide ou non numérique: -45,REJET
+trajets.csv,T480924,RG2/RG4/DOUBLON,Durée invalide ou non numérique: -120,REJET
+trajets.csv,T480945,RG2/RG4/DOUBLON,Trajet dupliqué : T480945,REJET
+trajets.csv,T481067,RG2/RG4/DOUBLON,Durée invalide ou non numérique: 0,REJET
+trajets.csv,T481074,RG2/RG4/DOUBLON,Durée invalide ou non numérique: 0,REJET
+trajets.csv,T481274,RG2/RG4/DOUBLON,Durée invalide ou non numérique: 0,REJET
+trajets.csv,T481464,RG2/RG4/DOUBLON,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,T481592,RG2/RG4/DOUBLON,Horodatage de départ invalide ou absent: Format d'horodatage invalide: 29/08/2026 12:59,REJET
+trajets.csv,T481625,RG2/RG4/DOUBLON,Trajet dupliqué : T481625,REJET
+trajets.csv,T481636,RG2/RG4/DOUBLON,Trajet dupliqué : T481636,REJET
+trajets.csv,T481688,RG2/RG4/DOUBLON,Durée invalide ou non numérique: -120,REJET
+trajets.csv,T481717,RG2/RG4/DOUBLON,Station d'arrivée inexistante dans le référentiel: S999,REJET
+trajets.csv,T481776,RG2/RG4/DOUBLON,Trajet dupliqué : T481776,REJET
+trajets.csv,T481834,RG2/RG4/DOUBLON,Trajet dupliqué : T481834,REJET
+trajets.csv,T481846,RG2/RG4/DOUBLON,Durée invalide ou non numérique: -45,REJET
+trajets.csv,T481885,RG2/RG4/DOUBLON,Horodatage de départ invalide ou absent: Format d'horodatage invalide: 30/08/2026 07:22,REJET
+trajets.csv,T481927,RG2/RG4/DOUBLON,Trajet dupliqué : T481927,REJET
+trajets.csv,T481958,RG2/RG4/DOUBLON,Horodatage de départ invalide ou absent: Format d'horodatage invalide: 30/08/2026 15:22,REJET
+incidents.csv,I2026-0028,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
+incidents.csv,I2026-0124,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET
+incidents.csv,I2026-0178,RG6/RG7/RG8,Date de résolution antérieure à la date de signalement,REJET

@@ -3,7 +3,6 @@
 Lire DATABASE_URL depuis l'environnement (.env), créer l'engine, la
 fabrique de sessions et la dépendance get_db() utilisée par les routeurs.
 """
-"""Connexion PostgreSQL et gestion des sessions SQLAlchemy."""
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
