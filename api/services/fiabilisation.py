@@ -62,14 +62,27 @@ def valider_station(ligne: Dict[str, Any]) -> None:
 
 # Règles de fiabilisation de trajets
 
-def valider_trajet(ligne: Dict[str, Any], stations_valides: Set[str]) -> None:
+def valider_trajet(ligne: Dict[str, Any], stations_valides: Set[str], 
+                    trajets_deja_vus: Optional[Set[str]] = None) -> None:
     """Valide les règles de gestion d'un trajet (RG4, RG2).
     
     - duree_secondes : entier strictement positif (> 0).
     - station_depart : obligatoire et doit exister dans les stations référencées.
     - station_arrivee : facultative, mais si renseignée, doit exister.
+    - trajet_id : unique (gestion des doublons).
+    -
     """
-    # RG4
+
+    # Gérer les doublons
+    trajet_id = str(ligne.get("trajet_id", "")).strip() if pd.notna(ligne.get("trajet_id")) else ""
+    #utilisation du get pr accéder éviter "KeyError" car certaines ligne n'ont pas de clé 
+    
+    if trajets_deja_vus is not None:
+        if trajet_id in trajets_deja_vus:
+            raise ValueError(f"Trajet dupliqué : {trajet_id}")
+        trajets_deja_vus.add(trajet_id)
+        
+    # RG4: durée de trajet doit être >0 (
     valeur_duree = ligne["duree_secondes"]
     try:
         duree = int(valeur_duree)
@@ -78,7 +91,14 @@ def valider_trajet(ligne: Dict[str, Any], stations_valides: Set[str]) -> None:
     except (ValueError, TypeError):
         raise ValueError(f"Durée invalide ou non numérique: {valeur_duree}")
 
-    # RG2
+    # 3. Valider l'horodatage de départ (nn vide)
+    #date_dep_str = ligne["depart_horodatage"]
+    date_dep_str = ligne.get("depart_horodatage")
+    dt_dep, err_dep = valider_et_parser_date(date_dep_str)
+    if err_dep:
+        raise ValueError(f"Horodatage de départ invalide ou absent: {err_dep}")
+
+    # RG2: station de départ obligatoire
     st_dep = str(ligne["station_depart"]).strip()
     if not st_dep or st_dep.lower() in ("nan", "none") or st_dep not in stations_valides:
         raise ValueError(f"Station de départ inexistante ou absente: {st_dep}")
