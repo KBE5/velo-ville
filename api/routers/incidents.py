@@ -5,13 +5,14 @@ et
 PUT /incidents/{incident_id}/statut (rôle exploitant).
 """
 
+from datetime import datetime, timezone
 from typing import Optional, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 
 from api.database import get_db
-from api.models import Incident
+from api.models import Incident, Utilisateur as User
 from api.schemas import IncidentResponse, IncidentPageResponse, IncidentUpdateStatut
 from api.dependencies import get_current_user, require_roles
 
@@ -65,7 +66,7 @@ def modifier_statut_incident(
     incident_id: str,
     body: IncidentUpdateStatut,
     db: Session = Depends(get_db),
-    _= Depends(require_roles("exploitant"))  
+    current_user: User = Depends(require_roles("exploitant"))
 ):
     """Modifie le statut d'un incident (réservé au rôle exploitant)."""
     stmt = select(Incident).where(Incident.incident_id == incident_id)
@@ -79,8 +80,7 @@ def modifier_statut_incident(
     
     # Si l'incident est résolu >> enregistrer la date de résolution 
     if body.statut == "resolu" and not incident.date_resolution:
-        from datetime import datetime
-        incident.date_resolution = datetime.utcnow()
+        incident.date_resolution = datetime.now(timezone.utc)
         
     db.commit()
     db.refresh(incident)

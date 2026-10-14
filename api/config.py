@@ -8,7 +8,7 @@ load_dotenv()
 
 # connexion PostgreSQL
 DATABASE_URL = os.environ["DATABASE_URL"]
-#DATABASE_URL_TEST = os.environ["DATABASE_URL_TEST"]
+DATABASE_URL_TEST = os.environ["DATABASE_URL_TEST"]
 
 # Params pour signer et vérifier les JWT
 JWT_SECRET = os.environ["JWT_SECRET"]

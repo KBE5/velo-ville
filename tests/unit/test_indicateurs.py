@@ -145,10 +145,26 @@ def test_stations_actives_limites(db_session, limite_demandee, nb_attendu_result
 def test_incidents_par_statut_connu(db_session, statut_incident, delai_attendu):
     
     """Vérifie l'indicateur incidents_par_statut avec des jeux paramétrés."""
+    
+    # (Corriger le test qui ne passé pas) > 
+    # Créer d'abord la station référencée par l'incident (pour respecter la clé étrangère)
+    
+    s1 = Station(
+        station_id="1",
+        nom="Station Test",
+        commune="Lille",
+        capacite=10,
+        latitude=50.63,
+        longitude=3.06,
+        date_mise_en_service=date(2025, 1, 1)
+    )
+    db_session.add(s1)
+    
     i1 = Incident(
         incident_id="1",  # str
         statut=statut_incident,
         cible="velo",
+        velo_id="V1",
         type_incident="technique",  
         date_signalement=datetime(2026, 8, 24, 10, 0, 0),
         date_resolution=datetime(2026, 8, 24, 14, 0, 0),
@@ -158,6 +174,7 @@ def test_incidents_par_statut_connu(db_session, statut_incident, delai_attendu):
         incident_id="2",  # str
         statut="ouvert",
         cible="station",
+        station_id="1",
         type_incident="vandalisme", 
         date_signalement=datetime(2026, 8, 24, 12, 0, 0),
         date_resolution=None,
