@@ -38,10 +38,10 @@ class StationResponse(BaseModel):
 
 
 class StationPageResponse(BaseModel):
+    resultats: List[StationResponse]
     total: int
     page: int = Field(..., ge=1)
     taille_page: int = Field(..., ge=1, le=100)
-    resultats: List[StationResponse]
 
 
 # =================Trajets =================================================
@@ -60,10 +60,10 @@ class TrajetResponse(BaseModel):
 
 
 class TrajetPageResponse(BaseModel):
+    resultats: List[TrajetResponse]
     total: int
     page: int = Field(..., ge=1)
     taille_page: int = Field(..., ge=1, le=100)
-    resultats: List[TrajetResponse]
 
 
 # =================Incidents ===============================================
@@ -87,11 +87,10 @@ class IncidentUpdateStatut(BaseModel):
 
 
 class IncidentPageResponse(BaseModel):
+    resultats: List[IncidentResponse]
     total: int
     page: int = Field(..., ge=1)
     taille_page: int = Field(..., ge=1, le=100)
-    resultats: List[IncidentResponse]
-
 
 # =================Indicateurs métiers =====================================
 
