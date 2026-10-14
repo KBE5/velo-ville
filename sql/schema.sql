@@ -25,8 +25,8 @@ CREATE TABLE station (
 -- 2. Table trajet
 -- ---------------------------------------------------------------
 CREATE TABLE trajet (
-    trajet_id VARCHAR(15) PRIMARY KEY,
-    velo_id VARCHAR(10) NOT NULL,               -- Format V + 4 chiffres
+    trajet_id VARCHAR(12) PRIMARY KEY,
+    velo_id VARCHAR(8) NOT NULL,               -- Format V + 4 chiffres
     depart_horodatage TIMESTAMP NOT NULL,
     station_depart VARCHAR(10) NOT NULL REFERENCES station(station_id) ON DELETE RESTRICT, -- obligatoire
     station_arrivee VARCHAR(10) REFERENCES station(station_id) ON DELETE RESTRICT,        -- facultative (si non restitué)
@@ -39,10 +39,10 @@ CREATE TABLE trajet (
 -- 3. Table incident
 -- ---------------------------------------------------------------
 CREATE TABLE incident (
-    incident_id VARCHAR(20) PRIMARY KEY,
+    incident_id VARCHAR(12) PRIMARY KEY,
     date_signalement TIMESTAMP NOT NULL,
     cible VARCHAR(10) NOT NULL CHECK (cible IN ('velo', 'station')),                          -- soit vélo, soit station
-    velo_id VARCHAR(10),                                                                       -- renseigné si cible = velo
+    velo_id VARCHAR(8),                                                                       -- renseigné si cible = velo
     station_id VARCHAR(10) REFERENCES station(station_id) ON DELETE RESTRICT,                 -- renseigné si cible = station
     type_incident VARCHAR(100) NOT NULL,
     statut VARCHAR(20) NOT NULL DEFAULT 'ouvert' CHECK (statut IN ('ouvert', 'en_cours', 'resolu')), -- statuts autorisés
@@ -65,11 +65,10 @@ CREATE TABLE incident (
 -- 4. Table utilisateur (Compatible avec comptes.sql)
 -- ---------------------------------------------------------------
 CREATE TABLE utilisateur (
-    id SERIAL PRIMARY KEY,
+    id_utilisateur SERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     mot_de_passe_hash VARCHAR(255) NOT NULL,   -- mdp haché (bcrypt)
-    role VARCHAR(20) NOT NULL CHECK (role IN ('exploitant', 'direction')),
-    cree_le TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    role VARCHAR(20) NOT NULL CHECK (role IN ('exploitant', 'direction'))
 );
 
 -- ---------------------------------------------------------------
