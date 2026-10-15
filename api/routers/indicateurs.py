@@ -4,7 +4,7 @@ GET /indicateurs/activite-par-jour,
 GET /indicateurs/stations-actives et
 GET /indicateurs/incidents-par-statut.
 """
-
+from datetime import date
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -16,9 +16,9 @@ router = APIRouter(prefix="/indicateurs", tags=["Indicateurs"], dependencies=[De
 
 
 @router.get("/activite-par-jour")
-def get_activite_par_jour(db: Session = Depends(get_db)):
+def get_activite_par_jour(date_debut: date, date_fin: date,db: Session = Depends(get_db)): #Rajout des dates suite à err interface
     
-    return activite_par_jour(db)
+    return activite_par_jour(db, date_debut=date_debut, date_fin=date_fin)
 
 
 @router.get("/stations-actives") 

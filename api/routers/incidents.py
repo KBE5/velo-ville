@@ -81,6 +81,10 @@ def modifier_statut_incident(
     # Si l'incident est résolu >> enregistrer la date de résolution 
     if body.statut == "resolu" and not incident.date_resolution:
         incident.date_resolution = datetime.now(timezone.utc)
+
+    # (ERR interface) > Si l'incident n'est plus résolu >> vider la date pour respecter la contrainte CHECK
+    elif body.statut != "resolu":
+        incident.date_resolution = None
         
     db.commit()
     db.refresh(incident)
