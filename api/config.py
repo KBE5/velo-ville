@@ -18,3 +18,5 @@ JWT_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "10"))
 
 
 # Paramètres utilisés pour le front 
+API_URL = os.getenv("API_URL", "http://localhost:8000")
+API_TIMEOUT_SECONDES = int(os.getenv("API_TIMEOUT_SECONDES", 15))
